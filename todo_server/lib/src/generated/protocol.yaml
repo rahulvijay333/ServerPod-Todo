@@ -1,0 +1,7 @@
+todo:
+  - createTodo:
+  - getAllTodo:
+  - updateTodo:
+  - deleteTodo:
+greeting:
+  - hello:
