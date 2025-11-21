@@ -2,6 +2,8 @@ import 'package:todo_client/todo_client.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
 
+import 'home/screen_home.dart';
+
 /// Sets up a global client object that can be used to talk to the server from
 /// anywhere in our app. The client is generated from your server code
 /// and is set up to connect to a Serverpod running on a local server on
@@ -41,20 +43,4 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ScreenHome extends StatelessWidget {
-  const ScreenHome({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.blueGrey,
-        title: Text(
-          'Todo ServerPod App',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
-}
