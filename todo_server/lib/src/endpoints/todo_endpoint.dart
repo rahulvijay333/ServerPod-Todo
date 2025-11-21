@@ -25,6 +25,6 @@ class TodoEndpoint extends Endpoint {
     if (todo.id == null) {
       throw Exception('No id found');
     }
-    final todoId = Todo.db.deleteRow(session, todo);
+    await Todo.db.deleteRow(session, todo);
   }
 }
