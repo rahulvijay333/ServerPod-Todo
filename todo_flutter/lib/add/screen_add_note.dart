@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:todo_client/todo_client.dart';
 import 'package:todo_flutter/main.dart';
+import 'package:todo_flutter/src/session_manager.dart';
 
 class ScreenAddNote extends StatefulWidget {
   const ScreenAddNote({super.key, this.todo});
