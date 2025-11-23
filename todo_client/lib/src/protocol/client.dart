@@ -13,7 +13,8 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'dart:async' as _i2;
 import 'package:todo_client/src/protocol/todo.dart' as _i3;
 import 'package:todo_client/src/protocol/greeting.dart' as _i4;
-import 'protocol.dart' as _i5;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
+import 'protocol.dart' as _i6;
 
 /// {@category Endpoint}
 class EndpointTodo extends _i1.EndpointRef {
@@ -68,6 +69,14 @@ class EndpointGreeting extends _i1.EndpointRef {
       );
 }
 
+class Modules {
+  Modules(Client client) {
+    auth = _i5.Caller(client);
+  }
+
+  late final _i5.Caller auth;
+}
+
 class Client extends _i1.ServerpodClientShared {
   Client(
     String host, {
@@ -84,7 +93,7 @@ class Client extends _i1.ServerpodClientShared {
     bool? disconnectStreamsOnLostInternetConnection,
   }) : super(
           host,
-          _i5.Protocol(),
+          _i6.Protocol(),
           securityContext: securityContext,
           authenticationKeyManager: authenticationKeyManager,
           streamingConnectionTimeout: streamingConnectionTimeout,
@@ -96,11 +105,14 @@ class Client extends _i1.ServerpodClientShared {
         ) {
     todo = EndpointTodo(this);
     greeting = EndpointGreeting(this);
+    modules = Modules(this);
   }
 
   late final EndpointTodo todo;
 
   late final EndpointGreeting greeting;
+
+  late final Modules modules;
 
   @override
   Map<String, _i1.EndpointRef> get endpointRefLookup => {
@@ -109,5 +121,6 @@ class Client extends _i1.ServerpodClientShared {
       };
 
   @override
-  Map<String, _i1.ModuleEndpointCaller> get moduleLookup => {};
+  Map<String, _i1.ModuleEndpointCaller> get moduleLookup =>
+      {'auth': modules.auth};
 }

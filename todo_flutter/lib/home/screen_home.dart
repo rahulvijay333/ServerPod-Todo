@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_client/todo_client.dart';
 import 'package:todo_flutter/add/screen_add_note.dart';
 import 'package:todo_flutter/main.dart';
+import 'package:todo_flutter/src/session_manager.dart';
 
 class ScreenHome extends StatefulWidget {
   const ScreenHome({super.key});
@@ -49,6 +50,13 @@ class _ScreenHomeState extends State<ScreenHome> {
           'Todo ServerPod App',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                sessionManager.signOutDevice();
+              },
+              child: Text('LogOut',style: TextStyle(color: Colors.white),))
+        ],
       ),
       body: alltodos == null
           ? Center(child: CircularProgressIndicator())
@@ -68,7 +76,9 @@ class _ScreenHomeState extends State<ScreenHome> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) {
-                                    return ScreenAddNote(todo: todo,);
+                                    return ScreenAddNote(
+                                      todo: todo,
+                                    );
                                   },
                                 )).then(
                                   (value) {

@@ -13,6 +13,7 @@ import 'package:serverpod_client/serverpod_client.dart' as _i1;
 import 'greeting.dart' as _i2;
 import 'todo.dart' as _i3;
 import 'package:todo_client/src/protocol/todo.dart' as _i4;
+import 'package:serverpod_auth_client/serverpod_auth_client.dart' as _i5;
 export 'greeting.dart';
 export 'todo.dart';
 export 'client.dart';
@@ -45,6 +46,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<_i4.Todo>) {
       return (data as List).map((e) => deserialize<_i4.Todo>(e)).toList() as T;
     }
+    try {
+      return _i5.Protocol().deserialize<T>(data, t);
+    } on _i1.DeserializationTypeNotFoundException catch (_) {}
     return super.deserialize<T>(data, t);
   }
 
@@ -57,6 +61,10 @@ class Protocol extends _i1.SerializationManager {
     }
     if (data is _i3.Todo) {
       return 'Todo';
+    }
+    className = _i5.Protocol().getClassNameForObject(data);
+    if (className != null) {
+      return 'serverpod_auth.$className';
     }
     return null;
   }
@@ -72,6 +80,10 @@ class Protocol extends _i1.SerializationManager {
     }
     if (dataClassName == 'Todo') {
       return deserialize<_i3.Todo>(data['data']);
+    }
+    if (dataClassName.startsWith('serverpod_auth.')) {
+      data['className'] = dataClassName.substring(15);
+      return _i5.Protocol().deserializeByClassName(data);
     }
     return super.deserializeByClassName(data);
   }

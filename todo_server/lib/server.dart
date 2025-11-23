@@ -5,6 +5,7 @@ import 'package:todo_server/src/web/routes/root.dart';
 
 import 'src/generated/protocol.dart';
 import 'src/generated/endpoints.dart';
+import 'package:serverpod_auth_server/serverpod_auth_server.dart' as auth;
 
 // This is the starting point of your Serverpod server. In most cases, you will
 // only need to make additions to this file if you add future calls,  are
@@ -12,7 +13,7 @@ import 'src/generated/endpoints.dart';
 
 void run(List<String> args) async {
   // Initialize Serverpod and connect it with your generated code.
-  final pod = Serverpod(args, Protocol(), Endpoints());
+  final pod = Serverpod(args, Protocol(), Endpoints(),  authenticationHandler: auth.authenticationHandler);
 
   // Setup a default page at the web root.
   pod.webServer.addRoute(RouteRoot(), '/');
@@ -22,6 +23,20 @@ void run(List<String> args) async {
     RouteStaticDirectory(serverDirectory: 'static', basePath: '/'),
     '/*',
   );
+  auth.AuthConfig.set(auth.AuthConfig(
+    sendValidationEmail: (session, email, validationCode) async {
+      print('------->>>>> Validation code for email : $validationCode');
+      // Send the validation email to the user.
+      // Return `true` if the email was successfully sent, otherwise `false`.
+      return true;
+    },
+    sendPasswordResetEmail: (session, userInfo, validationCode) async {
+      // Send the password reset email to the user.
+      // Return `true` if the email was successfully sent, otherwise `false`.
+      print('------->>>>> Validation code for reset : $validationCode');
+      return true;
+    },
+  ));
 
   // Start the server.
   await pod.start();

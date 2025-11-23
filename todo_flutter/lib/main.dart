@@ -1,6 +1,8 @@
 import 'package:todo_client/todo_client.dart';
 import 'package:flutter/material.dart';
 import 'package:serverpod_flutter/serverpod_flutter.dart';
+import 'package:todo_flutter/login/screen_login.dart';
+import 'package:todo_flutter/src/session_manager.dart';
 
 import 'home/screen_home.dart';
 
@@ -11,36 +13,40 @@ import 'home/screen_home.dart';
 /// production servers.
 /// In a larger app, you may want to use the dependency injection of your choice
 /// instead of using a global client object. This is just a simple example.
-late final Client client;
 
-late String serverUrl;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  // When you are running the app on a physical device, you need to set the
-  // server URL to the IP address of your computer. You can find the IP
-  // address by running `ipconfig` on Windows or `ifconfig` on Mac/Linux.
-  // You can set the variable when running or building your app like this:
-  // E.g. `flutter run --dart-define=SERVER_URL=https://api.example.com/`
-  const serverUrlFromEnv = String.fromEnvironment('SERVER_URL');
-  final serverUrl =
-      serverUrlFromEnv.isEmpty ? 'http://$localhost:8080/' : serverUrlFromEnv;
-
-  client = Client(serverUrl)
-    ..connectivityMonitor = FlutterConnectivityMonitor();
-
+  await initializeSessionManager();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sessionManager.addListener(
+      () {
+        setState(() {});
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Serverpod Demo',
-        theme: ThemeData(primarySwatch: Colors.blue),
-        home: ScreenHome());
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: sessionManager.isSignedIn ? ScreenHome() : ScreenLogin());
   }
 }
-
-
