@@ -17,6 +17,7 @@ abstract class Todo implements _i1.SerializableModel {
     required this.title,
     required this.description,
     required this.isCompleted,
+    required this.userId,
   });
 
   factory Todo({
@@ -24,6 +25,7 @@ abstract class Todo implements _i1.SerializableModel {
     required String title,
     required String description,
     required bool isCompleted,
+    required int userId,
   }) = _TodoImpl;
 
   factory Todo.fromJson(Map<String, dynamic> jsonSerialization) {
@@ -32,6 +34,7 @@ abstract class Todo implements _i1.SerializableModel {
       title: jsonSerialization['title'] as String,
       description: jsonSerialization['description'] as String,
       isCompleted: jsonSerialization['isCompleted'] as bool,
+      userId: jsonSerialization['userId'] as int,
     );
   }
 
@@ -46,6 +49,8 @@ abstract class Todo implements _i1.SerializableModel {
 
   bool isCompleted;
 
+  int userId;
+
   /// Returns a shallow copy of this [Todo]
   /// with some or all fields replaced by the given arguments.
   @_i1.useResult
@@ -54,6 +59,7 @@ abstract class Todo implements _i1.SerializableModel {
     String? title,
     String? description,
     bool? isCompleted,
+    int? userId,
   });
   @override
   Map<String, dynamic> toJson() {
@@ -62,6 +68,7 @@ abstract class Todo implements _i1.SerializableModel {
       'title': title,
       'description': description,
       'isCompleted': isCompleted,
+      'userId': userId,
     };
   }
 
@@ -79,11 +86,13 @@ class _TodoImpl extends Todo {
     required String title,
     required String description,
     required bool isCompleted,
+    required int userId,
   }) : super._(
           id: id,
           title: title,
           description: description,
           isCompleted: isCompleted,
+          userId: userId,
         );
 
   /// Returns a shallow copy of this [Todo]
@@ -95,12 +104,14 @@ class _TodoImpl extends Todo {
     String? title,
     String? description,
     bool? isCompleted,
+    int? userId,
   }) {
     return Todo(
       id: id is int? ? id : this.id,
       title: title ?? this.title,
       description: description ?? this.description,
       isCompleted: isCompleted ?? this.isCompleted,
+      userId: userId ?? this.userId,
     );
   }
 }

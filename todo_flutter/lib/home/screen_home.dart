@@ -48,21 +48,56 @@ class _ScreenHomeState extends State<ScreenHome> {
         backgroundColor: Colors.blueGrey,
         title: Text(
           'Todo ServerPod App',
-          style: TextStyle(color: Colors.white, fontSize: 16),
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
         ),
         actions: [
           TextButton(
               onPressed: () {
                 sessionManager.signOutDevice();
               },
-              child: Text('LogOut',style: TextStyle(color: Colors.white),))
+              child: Text(
+                'LogOut',
+                style: TextStyle(color: Colors.white),
+              ))
         ],
       ),
       body: alltodos == null
           ? Center(child: CircularProgressIndicator())
           : alltodos!.isEmpty
-              ? Center(
-                  child: Text('Todo Empty'),
+              ? Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      spacing: 15,
+                      children: [
+                        SizedBox(
+                          width: 5,
+                        ),
+                        CircleAvatar(
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              Icon(Icons.person),
+                          backgroundImage: NetworkImage(
+                              sessionManager.signedInUser?.imageUrl ?? ''),
+                        ),
+                        Text(
+                          'Welcome ${sessionManager.signedInUser?.userName?.toUpperCase() ?? ''}',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    SizedBox(
+                      height: 500,
+                      child: Center(
+                        child: Text('No Todos'),
+                      ),
+                    ),
+                  ],
                 )
               : RefreshIndicator(
                   onRefresh: () async {
@@ -70,37 +105,66 @@ class _ScreenHomeState extends State<ScreenHome> {
                   },
                   child: SingleChildScrollView(
                     child: Column(
-                      children: alltodos!
-                          .map(
-                            (todo) => ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) {
-                                    return ScreenAddNote(
-                                      todo: todo,
-                                    );
-                                  },
-                                )).then(
-                                  (value) {
-                                    loadAllTodos();
-                                  },
-                                );
-                              },
-                              title: Text(todo.title),
-                              subtitle: Text(todo.description),
-                              trailing: GestureDetector(
-                                onTap: () async {
-                                  await client.todo.deleteTodo(todo).then(
-                                    (value) {
-                                      loadAllTodos();
-                                    },
-                                  );
-                                },
-                                child: Icon(Icons.delete),
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          spacing: 15,
+                          children: [
+                            SizedBox(
+                              width: 5,
+                            ),
+                            CircleAvatar(
+                              onBackgroundImageError: (exception, stackTrace) =>
+                                  Icon(Icons.person),
+                              backgroundImage: NetworkImage(
+                                  sessionManager.signedInUser?.imageUrl ?? ''),
+                            ),
+                            Text(
+                              'Welcome ${sessionManager.signedInUser?.userName?.toUpperCase() ?? ''}',
+                              style: TextStyle(
+                                fontSize: 14,
                               ),
                             ),
-                          )
-                          .toList(),
+                          ],
+                        ),
+                        Divider(),
+                        Column(
+                          children: alltodos!
+                              .map(
+                                (todo) => ListTile(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) {
+                                        return ScreenAddNote(
+                                          todo: todo,
+                                        );
+                                      },
+                                    )).then(
+                                      (value) {
+                                        loadAllTodos();
+                                      },
+                                    );
+                                  },
+                                  title: Text(todo.title),
+                                  subtitle: Text(todo.description),
+                                  trailing: GestureDetector(
+                                    onTap: () async {
+                                      await client.todo.deleteTodo(todo).then(
+                                        (value) {
+                                          loadAllTodos();
+                                        },
+                                      );
+                                    },
+                                    child: Icon(Icons.delete),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
                   ),
                 ),

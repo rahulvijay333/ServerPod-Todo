@@ -73,7 +73,7 @@ class _ScreenAddNoteState extends State<ScreenAddNote> {
               GestureDetector(
                 onTap: () async {
                   try {
-                    final todo = Todo(
+                    final todo = Todo(userId: sessionManager.signedInUser!.id!,
                         id: widget.todo?.id,
                         title: titleController.text.trim(),
                         description: descriptionController.text.trim(),

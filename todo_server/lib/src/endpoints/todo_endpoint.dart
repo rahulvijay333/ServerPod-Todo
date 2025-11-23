@@ -8,7 +8,17 @@ class TodoEndpoint extends Endpoint {
   }
 
   Future<List<Todo>> getAllTodo(Session session) async {
-    final allTodos = await Todo.db.find(session);
+    final authInfo = await session.authenticated;
+    final userId = authInfo?.userId;
+
+    if (userId == null) {
+      throw Exception(
+          'User not authenticated');
+    }
+    final allTodos = await Todo.db.find(
+      session,
+      where: (todo) => todo.userId.equals(userId),
+    );
     return allTodos;
   }
 
