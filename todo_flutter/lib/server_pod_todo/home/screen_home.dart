@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_client/todo_client.dart';
-import 'package:todo_flutter/add/screen_add_note.dart';
+import 'package:todo_flutter/server_pod_todo/add/screen_add_note.dart';
 import 'package:todo_flutter/main.dart';
 import 'package:todo_flutter/src/session_manager.dart';
 
@@ -15,7 +15,7 @@ class _ScreenHomeState extends State<ScreenHome> {
   List<Todo>? alltodos;
 
   void loadAllTodos() async {
-    alltodos = await client.todo.getAllTodo();
+    alltodos = await client!.todo.getAllTodo();
     setState(() {});
   }
 
@@ -54,7 +54,7 @@ class _ScreenHomeState extends State<ScreenHome> {
         actions: [
           TextButton(
               onPressed: () {
-                sessionManager.signOutDevice();
+                sessionManager!.signOutDevice();
               },
               child: Text(
                 'LogOut',
@@ -80,10 +80,10 @@ class _ScreenHomeState extends State<ScreenHome> {
                           onBackgroundImageError: (exception, stackTrace) =>
                               Icon(Icons.person),
                           backgroundImage: NetworkImage(
-                              sessionManager.signedInUser?.imageUrl ?? ''),
+                              sessionManager!.signedInUser?.imageUrl ?? ''),
                         ),
                         Text(
-                          'Welcome ${sessionManager.signedInUser?.userName?.toUpperCase() ?? ''}',
+                          'Welcome ${sessionManager!.signedInUser?.userName?.toUpperCase() ?? ''}',
                           style: TextStyle(
                             fontSize: 14,
                           ),
@@ -119,10 +119,10 @@ class _ScreenHomeState extends State<ScreenHome> {
                               onBackgroundImageError: (exception, stackTrace) =>
                                   Icon(Icons.person),
                               backgroundImage: NetworkImage(
-                                  sessionManager.signedInUser?.imageUrl ?? ''),
+                                  sessionManager!.signedInUser?.imageUrl ?? ''),
                             ),
                             Text(
-                              'Welcome ${sessionManager.signedInUser?.userName?.toUpperCase() ?? ''}',
+                              'Welcome ${sessionManager!.signedInUser?.userName?.toUpperCase() ?? ''}',
                               style: TextStyle(
                                 fontSize: 14,
                               ),
@@ -152,7 +152,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                                   subtitle: Text(todo.description),
                                   trailing: GestureDetector(
                                     onTap: () async {
-                                      await client.todo.deleteTodo(todo).then(
+                                      await client!.todo.deleteTodo(todo).then(
                                         (value) {
                                           loadAllTodos();
                                         },

@@ -29,7 +29,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
         title: Text('Login',style: TextStyle(fontSize: 16,color: Colors.white),),
       ),
 
-      body:  Center(child: SignInWithEmailButton(caller: client.modules.auth,)),
+      body:  Center(child: SignInWithEmailButton(caller: client!.modules.auth,)),
     );
   }
 }

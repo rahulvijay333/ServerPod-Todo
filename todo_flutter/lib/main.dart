@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_flutter/login/screen_login.dart';
+import 'package:todo_flutter/server_pod_todo/login/screen_login.dart';
 import 'package:todo_flutter/src/session_manager.dart';
 
-import 'home/screen_home.dart';
+import 'screen_options.dart';
+import 'server_pod_todo/home/screen_home.dart';
 
 /// Sets up a global client object that can be used to talk to the server from
 /// anywhere in our app. The client is generated from your server code
@@ -15,7 +16,7 @@ import 'home/screen_home.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await initializeSessionManager();
+  // await initializeSessionManager();
   runApp(const MyApp());
 }
 
@@ -31,20 +32,27 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    sessionManager.addListener(
-      () {
-        setState(() {});
-      },
-    );
+
+    // sessionManager?.addListener(
+    //   () {
+    //     setState(() {});
+    //   },
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Serverpod Demo',
+        title: 'demo',
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.blue,
+            centerTitle: true,
+            titleTextStyle: TextStyle(
+                fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
+          ),
           primarySwatch: Colors.blue,
         ),
-        home: sessionManager.isSignedIn ? ScreenHome() : ScreenLogin());
+        home: ScreenOptions());
   }
 }
